@@ -5,7 +5,6 @@ import {
 	redirect
 } from '@remix-run/node';
 import { Form, Link, useActionData } from '@remix-run/react';
-import { useState } from 'react';
 
 import { FormField } from '~/components/form-field';
 import { validateEmail, validatePassword } from '~/utils/validation';

@@ -41,6 +41,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Signup() {
     const data = useActionData<typeof action>();
+    
 	return (
 		<Form
 			method={'post'}
