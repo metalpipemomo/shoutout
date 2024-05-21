@@ -4,7 +4,7 @@ import {
 	LoaderFunction,
 	redirect
 } from '@remix-run/node';
-import { Form, Link } from '@remix-run/react';
+import { Form, Link, useActionData } from '@remix-run/react';
 import { useState } from 'react';
 
 import { FormField } from '~/components/form-field';
@@ -30,13 +30,15 @@ export const action: ActionFunction = async ({ request }) => {
 	].flatMap((validation) => validation.errors || []);
 
 	if (errors.length) {
-		return json({ errors, fields: { email, password } }, { status: 400 });
+		return json({ error: errors.toString() }, { status: 400 });
 	}
 
 	return await login({ email, password });
 };
 
 export default function Login() {
+	const data = useActionData<typeof action>();
+
 	return (
 		<Form
 			method={'post'}
@@ -67,8 +69,20 @@ export default function Login() {
 				>
 					Sign In
 				</button>
-				<p className={'text-xs font-semibold mt-3 tracking-wide'}>
-					New to shoutout?{' '}<Link to={'/signup'} className={'underline text-blue-700'}>Sign up!</Link>
+				{data?.error ? (
+					<p
+						className={
+							'mt-2 border-b px-2 text-xs font-semibold tracking-wide text-red-500'
+						}
+					>
+						{data.error}
+					</p>
+				) : null}
+				<p className={'mt-3 text-xs font-semibold tracking-wide'}>
+					New to shoutout?{' '}
+					<Link to={'/signup'} className={'text-blue-700 underline'}>
+						Sign up!
+					</Link>
 				</p>
 			</div>
 		</Form>

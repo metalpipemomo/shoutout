@@ -1,5 +1,5 @@
 import { json, ActionFunction } from '@remix-run/node';
-import { Form, Link } from '@remix-run/react';
+import { Form, Link, useActionData } from '@remix-run/react';
 
 import { FormField } from '~/components/form-field';
 import {
@@ -33,13 +33,14 @@ export const action: ActionFunction = async ({ request }) => {
 	].flatMap((validation) => validation.errors || []);
 
 	if (errors.length) {
-		return json({ errors, fields: { email, password } }, { status: 400 });
+		return json({ error: errors.toString() }, { status: 400 });
 	}
 
 	return await register({ email, password, firstName, lastName });
 };
 
 export default function Signup() {
+    const data = useActionData<typeof action>();
 	return (
 		<Form
 			method={'post'}
@@ -86,6 +87,15 @@ export default function Signup() {
 				>
 					Sign Up
 				</button>
+                {data?.error ? (
+					<p
+						className={
+							'mt-2 border-b px-2 text-xs font-semibold tracking-wide text-red-500'
+						}
+					>
+						{data.error}
+					</p>
+				) : null}
                 <p className={'text-xs font-semibold mt-3 tracking-wide'}>
 					Already have an account?{' '}<Link to={'/login'} className={'underline text-blue-700'}>Log in!</Link>
 				</p>
