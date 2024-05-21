@@ -1,7 +1,7 @@
 import { json, createCookieSessionStorage, redirect, Session, SessionData, TypedResponse } from '@remix-run/node';
 
 import type { RegisterForm, LoginForm } from './types.server';
-import { prisma } from './prisma.server';
+import { db } from './prisma.server';
 import { createUser } from './user.server';
 import { VerifyHash } from './helpers.server';
 
@@ -33,7 +33,7 @@ export async function createUserSession(userId: string, redirectTo: string) {
 }
 
 export async function register(data: RegisterForm) {
-	const userExists = await prisma.user.count({ where: { email: data.email } });
+	const userExists = await db.user.count({ where: { email: data.email } });
 	if (userExists) {
 		return json(
 			{ error: `User already exists with that email` },
@@ -56,7 +56,7 @@ export async function register(data: RegisterForm) {
 }
 
 export async function login(data: LoginForm) {
-	const user = await prisma.user.findUnique({
+	const user = await db.user.findUnique({
 		where: { email: data.email }
 	});
 	if (!user) {
@@ -94,7 +94,7 @@ export async function getUser(request: Request) {
     }
 
     try {
-        const user = await prisma.user.findUnique({
+        const user = await db.user.findUnique({
             where: { id: userId },
             select: { id: true, email: true, firstName: true, lastName: true }
         });

@@ -17,13 +17,18 @@ export function Header() {
 				>
 					Account
 				</button>
-				<button
-					className={
-						'rounded bg-red-500 px-4 py-2 font-semibold text-white shadow-md'
-					}
-				>
-					Sign Out
-				</button>
+				<Form
+					action={'/logout'}
+					method={'post'}>
+					<button
+						type={'submit'}
+						className={
+							'rounded bg-red-500 px-4 py-2 font-semibold text-white shadow-md'
+						}
+					>
+						Sign Out
+					</button>
+				</Form>
 			</div>
 			<div className={'md:hidden'}>
 				<button
